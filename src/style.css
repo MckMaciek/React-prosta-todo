@@ -1,0 +1,130 @@
+body{
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+    background-color:#FBF9E1;
+    font-family: Arial, Helvetica, sans-serif
+}
+
+.flex-container{
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    box-sizing: border-box;
+    background: burlywood;
+    width: 100%;
+}
+
+.flex-container__userInput-wrapper{
+    width: 100%;
+}
+
+@media (max-width: 1300px) {
+.flex-container__userInput{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+}
+
+.flex-container input[placeholder="Czynność"]{
+    margin-left: 10%;
+}
+
+@media (max-width: 1300px) {
+.flex-container input[placeholder="Czynność"]{
+    margin-left: 0;
+}
+}
+
+.flex-container input[type="text"]{
+    margin-top: 5px;
+    width: 400px;
+    height: 25px;
+}
+.flex-container__submit{
+    display: flex;
+    justify-content: center;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+.flex-container__submit button{
+    width: 200px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.activity-container{
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+}
+
+.activity-container__item{
+    background-color: khaki;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 25px;
+    width: 700px;
+    height: 200px;
+    flex-flow: column;
+    
+}
+
+.activity-container__item__delete{
+    display: flex;
+    align-self: center;
+
+}
+.activity-container__item__delete button{
+    margin-top: 5px;
+    margin-bottom: 5px;
+    width: 200px;
+    height: 25px;
+    border-radius: 10px;
+    cursor: pointer;
+    display: none;
+    transition: opacity 1s ease-out;
+}
+
+.activity-container__item:hover{
+    background-color: lightskyblue;
+}
+
+
+
+.activity-container__item:hover .activity-container__item__delete button{
+    cursor: pointer;
+    display: block;
+}
+
+.activity-container__item__change button{
+    margin-top: 5px;
+    margin-bottom: 10px;
+    width: 200px;
+    height: 25px;
+    border-radius: 10px;
+    cursor: pointer;
+    display: none;
+}
+
+.activity-container__item:hover .activity-container__item__change button{
+    cursor: pointer;
+    display: block;
+}
+
+.display-time__flex-container{
+    background-color: #F9F5D0;
+    width: 100%;
+    border-style: groove;
+}
+.display-time__flex-container p{
+    text-align: center;
+}
+
+
+
+button:focus { outline: none; }
