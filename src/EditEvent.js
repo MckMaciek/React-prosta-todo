@@ -1,5 +1,6 @@
 import React from 'react';
 import "./style.css"
+import validateHour from './validateUtils';
 
 const EditEvent = props =>{
     return(

@@ -15,7 +15,7 @@ const Activity = props =>{
                     <button onClick={() => props.modifyElement(props.id)} > MODIFY </button> 
                </div>
                <div className="activity_container__time_added">
-                    <p> Added on - {props.hourAdded}:{props.minuteAdded} </p>
+                    <p> Added {props.dayAdded}-{props.monthAdded}-{props.yearAdded} at {props.hourAdded}:{props.minuteAdded} </p>
                </div>
 
 

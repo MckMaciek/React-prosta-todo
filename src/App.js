@@ -3,6 +3,7 @@ import Activity from './Activity';
 import EditEvent from './EditEvent';
 import uniqid from "uniqid"
 import PropTypes from 'prop-types';
+import {validateActivity, validateHour, validateMinute} from './validateUtils';
 
 
 class App extends Component{
@@ -12,16 +13,20 @@ class App extends Component{
         this.state = {
 
             nowTime : {
+
+                day : new Date().getDate(),
+                month : new Date().getMonth() + 1,
+                year : new Date().getFullYear(),
                 hour : new Date().getHours(),
                 minute : new Date().getMinutes(),
                 seconds : new Date().getSeconds()
             },
             activity : [
-                {id : uniqid(), actvityName : "Sprzątanie", hour : 12, minute : 22, addedOn : {hour : 0, minute : 0 }},
-                {id : uniqid(), actvityName : "Gotowanie", hour : 13, minute : 55,  addedOn : {hour : 0, minute : 0 }},
-                {id : uniqid(), actvityName : "Pranie", hour : 18, minute : 32,     addedOn : {hour : 0, minute : 0 }}
+                {id : uniqid(), actvityName : "Sprzątanie", hour : 12, minute : 22, addedOn : {day: 0, month: 0, year: 0, hour : 0, minute : 0 }},
+                {id : uniqid(), actvityName : "Gotowanie", hour : 13, minute : 55,  addedOn : {day: 0, month: 0, year: 0, hour : 0, minute : 0 }},
+                {id : uniqid(), actvityName : "Pranie", hour : 18, minute : 32,     addedOn : {day: 0, month: 0, year: 0, hour : 0, minute : 0 }}
             ],
-            editedActivity : { id : uniqid(), actvityName : "",  hour : -1, minute : -1, addedOn : {hour : 0, minute : 0 } }
+            editedActivity : { id : uniqid(), actvityName : "",  hour : -1, minute : -1, addedOn : {day: 0, month: 0, year: 0,  hour : 0, minute : 0 } }
         };
 
 
@@ -39,6 +44,9 @@ class App extends Component{
             this.setState(prevState =>{
                 return{
                     nowTime : {
+                        day : new Date().getDate(),
+                        month : new Date().getMonth() + 1,
+                        year : new Date().getFullYear(),
                         hour : new Date().getHours(),
                         minute : new Date().getMinutes(),
                         seconds : new Date().getSeconds() 
@@ -57,8 +65,6 @@ class App extends Component{
 
         let element1;
 
-        console.log(this.state.nowTime);
-
         (e.target.id !== "actvityName") ? element1 = parseInt(e.target.value) : element1 = String(e.target.value);
         let element2 = e.target.id;
         
@@ -71,9 +77,9 @@ class App extends Component{
         });
         this.setState(prevState =>{
             return{
-            editedActivity : {...prevState.editedActivity, addedOn : {hour : this.state.nowTime.hour, minute : this.state.nowTime.minute}}
+            editedActivity : {...prevState.editedActivity, addedOn : {day : this.state.nowTime.day , month : this.state.nowTime.month, year: this.state.nowTime.year, hour : this.state.nowTime.hour, minute : this.state.nowTime.minute}}
         }
-    },() => console.log(this.state.editedActivity));
+    },() => console.log(this.state.editedActivity));    
 
     }
 
@@ -89,7 +95,7 @@ class App extends Component{
         },() => localStorage.setItem("activity", JSON.stringify(this.state)))
 
         this.setState(prevState =>{ 
-            return {editedActivity :  { id : uniqid(), actvityName : "",  hour : -1, minute : -1, addedOn : {hour : 0, minute : 0 } }}
+            return {editedActivity :  { id : uniqid(), actvityName : "",  hour : -1, minute : -1, addedOn : {day: 0, month: 0, year: 0, hour : 0, minute : 0 } }}
         }, () => localStorage.setItem("activity", JSON.stringify(this.state)))
 
         document.getElementById("actvityName").value = "";;
@@ -101,17 +107,22 @@ class App extends Component{
 
     eventOnSubmit(){
 
+
+        if (validateHour(this.state.editedActivity.hour) && 
+            validateMinute(this.state.editedActivity.minute) &&
+            validateActivity(this.state.editedActivity.actvityName)){
+
             this.setState(prevState =>{
                     return{    
                     activity : [...prevState.activity, prevState.editedActivity],
-                    editedActivity :  { id : uniqid(), actvityName : "",  hour : -1, minute : -1, addedOn : {hour : 0, minute : 0 } },
+                    editedActivity :  { id : uniqid(), actvityName : "",  hour : -1, minute : -1, addedOn : {day: 0, month: 0, year: 0, hour : 0, minute : 0 } },
                 }
             },() => {localStorage.setItem("activity", JSON.stringify(this.state)); console.log(this.state.activity)});
 
-
-            document.getElementById("actvityName").value = "";;
-            document.getElementById("hour").value = "";
-            document.getElementById("minute").value = "";
+         }
+         document.getElementById("actvityName").value = "";;
+         document.getElementById("hour").value = "";
+         document.getElementById("minute").value = "";
     }
 
     eventDelete(elementToBeDeleted){
@@ -140,6 +151,9 @@ class App extends Component{
                     name={element.actvityName} 
                     hour={element.hour}  
                     minute={element.minute}
+                    dayAdded={element.addedOn.day}
+                    monthAdded={element.addedOn.month}
+                    yearAdded={element.addedOn.year}
                     hourAdded={element.addedOn.hour}
                     minuteAdded={element.addedOn.minute}
                     
