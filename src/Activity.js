@@ -7,7 +7,7 @@ const Activity = props =>{
      return(
       <div className="activity-container">
           <div className="activity-container__item">
-               <h3> {props.name} - {props.hour == "-1" ? "" : props.hour }:{props.minute == "-1" ? "" : props.minute} </h3>
+               <h3> {props.name} - {props.hour < 10 ? "0" + props.hour : props.hour}:{props.minute < 10 ? "0" + props.minute : props.minute} </h3>
                <div className="activity-container__item__delete">
                     <button onClick={() => props.deleteChange(props.id)} > DELETE </button> 
                </div>
@@ -15,7 +15,8 @@ const Activity = props =>{
                     <button onClick={() => props.modifyElement(props.id)} > MODIFY </button> 
                </div>
                <div className="activity_container__time_added">
-                    <p> Added {props.dayAdded}-{props.monthAdded}-{props.yearAdded} at {props.hourAdded}:{props.minuteAdded} </p>
+                    <p> Added {props.dayAdded}-{props.monthAdded}-{props.yearAdded} {props.hourAdded < 10 ? "0" + props.hourAdded : props.hourAdded }
+                    :{props.minuteAdded < 10 ? "0" + props.minuteAdded : props.minuteAdded} </p>
                </div>
 
 

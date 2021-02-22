@@ -6,6 +6,10 @@ body{
     font-family: Arial, Helvetica, sans-serif
 }
 
+.main:last-child{/* JAK SIE COS DODA DO DIVA MAIN TO NIE ZADZIALA - JEST TU TO PO TO ZEBY OSTATNI ELEMENT AKTYWNOSCI MIAL ODSTEP DOLNY*/
+    margin-bottom: 50px;
+}
+
 .flex-container{
     display: flex;
     justify-content: center;
@@ -29,9 +33,21 @@ body{
 }
 }
 
-.flex-container input[placeholder="Czynność"]{
-    margin-left: 10%;
+.flex-container-inputs__userInput{
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
+
+@media (max-width: 1300px) {
+    .flex-container-inputs__userInput{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+    }
+    }
+
 
 @media (max-width: 1300px) {
 .flex-container input[placeholder="Czynność"]{
@@ -44,6 +60,13 @@ body{
     width: 400px;
     height: 25px;
 }
+
+.flex-container input[type="date"]{
+    margin-top: 5px;
+    width: 200px;
+    height: 27px;
+}
+
 .flex-container__submit{
     display: flex;
     justify-content: center;
@@ -126,5 +149,34 @@ body{
 }
 
 
+.sort-elements__main{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-left: 10px;
+}
+
+.sort-elements__main button{
+    width: 150px;
+    height: 44px;
+    margin-top: 5px;
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: khaki;
+}
+
+.sort-elements__main button:hover{
+    background-color: lightskyblue;
+}
+
+.listed-menu{
+
+    margin-left: 15px;
+    display: none;
+}
+
+.listed-menu button{
+    margin-right: 15px;
+}
 
 button:focus { outline: none; }

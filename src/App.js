@@ -22,9 +22,12 @@ class App extends Component{
                 seconds : new Date().getSeconds()
             },
             activity : [
-                {id : uniqid(), actvityName : "Sprzątanie", hour : 12, minute : 22, addedOn : {day: 0, month: 0, year: 0, hour : 0, minute : 0 }},
-                {id : uniqid(), actvityName : "Gotowanie", hour : 13, minute : 55,  addedOn : {day: 0, month: 0, year: 0, hour : 0, minute : 0 }},
-                {id : uniqid(), actvityName : "Pranie", hour : 18, minute : 32,     addedOn : {day: 0, month: 0, year: 0, hour : 0, minute : 0 }}
+                {id : uniqid(), actvityName : "Sprzątanie", hour : 12, minute : 22, 
+                addedOn : {day: 0, month: 0, year: 0, hour : 0, minute : 0 }},
+                {id : uniqid(), actvityName : "Gotowanie", hour : 13, minute : 55,  
+                addedOn : {day: 0, month: 0, year: 0, hour : 0, minute : 0 }},
+                {id : uniqid(), actvityName : "Pranie", hour : 18, minute : 32,     
+                addedOn : {day: 0, month: 0, year: 0, hour : 0, minute : 0 }}
             ],
             editedActivity : { id : uniqid(), actvityName : "",  hour : -1, minute : -1, addedOn : {day: 0, month: 0, year: 0,  hour : 0, minute : 0 } }
         };
@@ -34,6 +37,10 @@ class App extends Component{
         this.eventOnSubmit = this.eventOnSubmit.bind(this);
         this.eventDelete = this.eventDelete.bind(this);
         this.modifyElementToChange = this.modifyElementToChange.bind(this);
+        this.sortElementsByHour = this.sortElementsByHour.bind(this);
+        this.hideOrShowElementsOnSort = this.hideOrShowElementsOnSort.bind(this);
+        this.sortElementsByName = this.sortElementsByName.bind(this);
+        this.sortElementsByDate = this.sortElementsByDate.bind(this);
 
     }
 
@@ -125,6 +132,50 @@ class App extends Component{
          document.getElementById("minute").value = "";
     }
 
+    hideOrShowElementsOnSort(){
+        let listed_menu =  document.getElementById("listed_menu");
+        listed_menu.style.display == "flex" ? listed_menu.style.display = "none" : listed_menu.style.display = "flex";
+    }
+
+    sortElementsByHour(){
+
+        this.setState(prevState=>{
+            return{
+                activity : prevState.activity.sort((a,b) => a.hour - b.hour)
+            }
+        },() => localStorage.setItem("activity", JSON.stringify(this.state)))
+
+        this.hideOrShowElementsOnSort();
+    }
+
+    sortElementsByName(){
+        this.setState(prevState=>{
+            return{
+                activity : prevState.activity.sort((a,b) =>{
+                if(a.actvityName.toUpperCase() < b.actvityName.toUpperCase()) { return -1; }
+                if(a.actvityName.toUpperCase() > b.actvityName.toUpperCase()) { return 1; }
+                return 0;  
+            })
+            }
+        },() => localStorage.setItem("activity", JSON.stringify(this.state)))
+
+        this.hideOrShowElementsOnSort();
+    }
+
+    sortElementsByDate(){
+        
+        this.setState(prevState=>{
+            return{
+                activity : prevState.activity.sort((a,b)=>{
+
+
+                })
+            }
+        })
+
+        this.hideOrShowElementsOnSort();
+    }
+
     eventDelete(elementToBeDeleted){
 
         this.setState(prevState =>{
@@ -170,7 +221,15 @@ class App extends Component{
                 eventTimeChangeSeconds={this.state.nowTime.seconds} 
 
                 eventChange={(e) => this.eventOnChange(e)} eventSubmit={() => this.eventOnSubmit()}></EditEvent>
-                {listOfActivity}
+                <div className="sort-elements__main">
+                    <button onClick={() => this.hideOrShowElementsOnSort()}>SORT</button>
+                    <div className="listed-menu" id="listed_menu">
+                        <button onClick={() => this.sortElementsByHour()}>by hour</button>
+                        <button onClick={() => this.sortElementsByName()}>by name</button>
+                        <button onClick={() => this.sortElementsByDate()}>by date</button>
+                    </div>
+                </div>
+                {listOfActivity}e
 
 
             </div>
