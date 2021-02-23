@@ -8,10 +8,10 @@ const EditEvent = props =>{
             <div className="flex-container__userInput-wrapper"> 
             <div className="flex-container__userInput">
                 <div className="flex-container-inputs__userInput">
-                <input autoComplete="off" onChange={e => props.eventChange(e)} placeholder="Czynność" type="text" id="actvityName"/>
-                <input autoComplete="off" onChange={e => props.eventChange(e)} placeholder="Godzina"type="text" id="hour"/>
-                <input autoComplete="off" onChange={e => props.eventChange(e)} placeholder="Minuta" type="text" id="minute"/>
-                <input type="date" id="start" name="trip-start"/>
+                    <input autoComplete="off" onChange={e => props.eventChange(e)} placeholder="Czynność" type="text" id="actvityName"/>
+                    <input autoComplete="off" onChange={e => props.eventChange(e)} placeholder="Godzina"type="text" id="hour"/>
+                    <input autoComplete="off" onChange={e => props.eventChange(e)} placeholder="Minuta" type="text" id="minute"/>
+                    <input onChange={(e) => props.eventChangeDate()} type="date" id="start" name="trip-start"/>
                 </div>
                 <div className="flex-container__submit">
                     <button onClick={() => props.eventSubmit()}>ADD</button>

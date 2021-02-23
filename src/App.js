@@ -22,14 +22,17 @@ class App extends Component{
                 seconds : new Date().getSeconds()
             },
             activity : [
-                {id : uniqid(), actvityName : "Sprzątanie", hour : 12, minute : 22, 
-                addedOn : {day: 0, month: 0, year: 0, hour : 0, minute : 0 }},
-                {id : uniqid(), actvityName : "Gotowanie", hour : 13, minute : 55,  
-                addedOn : {day: 0, month: 0, year: 0, hour : 0, minute : 0 }},
-                {id : uniqid(), actvityName : "Pranie", hour : 18, minute : 32,     
-                addedOn : {day: 0, month: 0, year: 0, hour : 0, minute : 0 }}
+                // {id : uniqid(), actvityName : "Sprzątanie", hour : 12, minute : 22, 
+                // dateOn : {day: 0, month: 0, year: 0},
+                // addedOn : {day: 0, month: 0, year: 0, hour : 0, minute : 0 }},
+                // {id : uniqid(), actvityName : "Gotowanie", hour : 13, minute : 55,
+                // dateOn : {day: 0, month: 0, year: 0},  
+                // addedOn : {day: 0, month: 0, year: 0, hour : 0, minute : 0 }},
+                // {id : uniqid(), actvityName : "Pranie", hour : 18, minute : 32,    
+                // dateOn : {day: 0, month: 0, year: 0}, 
+                // addedOn : {day: 0, month: 0, year: 0, hour : 0, minute : 0 }}
             ],
-            editedActivity : { id : uniqid(), actvityName : "",  hour : -1, minute : -1, addedOn : {day: 0, month: 0, year: 0,  hour : 0, minute : 0 } }
+            editedActivity : { id : uniqid(), actvityName : "",  hour : -1, minute : -1, addedOn : {day: 0, month: 0, year: 0,  hour : 0, minute : 0 }, dateOn : {day: 0, month: 0, year: 0}, }
         };
 
 
@@ -41,6 +44,7 @@ class App extends Component{
         this.hideOrShowElementsOnSort = this.hideOrShowElementsOnSort.bind(this);
         this.sortElementsByName = this.sortElementsByName.bind(this);
         this.sortElementsByDate = this.sortElementsByDate.bind(this);
+        this.eventOnChangeDate = this.eventOnChangeDate.bind(this);
 
     }
 
@@ -62,9 +66,22 @@ class App extends Component{
             })
         },1000)
 
-        console.log(this.state);
 
         this.setState(JSON.parse(localStorage.getItem("activity")));    
+    }
+
+
+    eventOnChangeDate(e){
+        let dateInInput = document.getElementById("start").value;
+        let dateInInputSplitted = dateInInput.split("-");
+
+        let dateToBeReplaced = {day: dateInInputSplitted[2], month: dateInInputSplitted[1], year: dateInInputSplitted[0]}
+        alert(dateToBeReplaced)
+
+        this.setState(prevState=>{
+                dateOn :  Object.assign(prevState.editedActivity.dateOn, dateToBeReplaced )
+        }, () => localStorage.setItem("activity", JSON.stringify(this.state)));
+
     }
 
 
@@ -84,7 +101,8 @@ class App extends Component{
         });
         this.setState(prevState =>{
             return{
-            editedActivity : {...prevState.editedActivity, addedOn : {day : this.state.nowTime.day , month : this.state.nowTime.month, year: this.state.nowTime.year, hour : this.state.nowTime.hour, minute : this.state.nowTime.minute}}
+            editedActivity : {...prevState.editedActivity, addedOn : {day : this.state.nowTime.day , month : this.state.nowTime.month, year: this.state.nowTime.year, hour : this.state.nowTime.hour, minute : this.state.nowTime.minute}
+            , dateOn : {day: 0, month: 0, year: 0}}
         }
     },() => console.log(this.state.editedActivity));    
 
@@ -102,7 +120,7 @@ class App extends Component{
         },() => localStorage.setItem("activity", JSON.stringify(this.state)))
 
         this.setState(prevState =>{ 
-            return {editedActivity :  { id : uniqid(), actvityName : "",  hour : -1, minute : -1, addedOn : {day: 0, month: 0, year: 0, hour : 0, minute : 0 } }}
+            return {editedActivity :  { id : uniqid(), actvityName : "",  hour : -1, minute : -1, addedOn : {day: 0, month: 0, year: 0, hour : 0, minute : 0 }, dateOn : {day: 0, month: 0, year: 0}, }}
         }, () => localStorage.setItem("activity", JSON.stringify(this.state)))
 
         document.getElementById("actvityName").value = "";;
@@ -122,7 +140,7 @@ class App extends Component{
             this.setState(prevState =>{
                     return{    
                     activity : [...prevState.activity, prevState.editedActivity],
-                    editedActivity :  { id : uniqid(), actvityName : "",  hour : -1, minute : -1, addedOn : {day: 0, month: 0, year: 0, hour : 0, minute : 0 } },
+                    editedActivity :  { id : uniqid(), actvityName : "",  hour : -1, minute : -1, addedOn : {day: 0, month: 0, year: 0, hour : 0, minute : 0 }, dateOn : {day: 0, month: 0, year: 0}, },
                 }
             },() => {localStorage.setItem("activity", JSON.stringify(this.state)); console.log(this.state.activity)});
 
@@ -130,6 +148,7 @@ class App extends Component{
          document.getElementById("actvityName").value = "";;
          document.getElementById("hour").value = "";
          document.getElementById("minute").value = "";
+        document.getElementById("start").value = "";
     }
 
     hideOrShowElementsOnSort(){
@@ -167,8 +186,17 @@ class App extends Component{
         this.setState(prevState=>{
             return{
                 activity : prevState.activity.sort((a,b)=>{
-
-
+                        if (a.dateOn.year > b.dateOn.year) return 1;
+                        else if(a.dateOn.year < b.dateOn.year) return -1;
+                        else if(a.dateOn.month > b.dateOn.month) return 1;
+                        else if(a.dateOn.month < b.dateOn.month) return -1;
+                        else if(a.dateOn.day > b.dateOn.day) return 1;
+                        else if(a.dateOn.day < b.dateOn.day) return -1;
+                        else if(a.hour > b.hour) return 1;
+                        else if(a.hour < b.hour) return -1;
+                        else if(a.minute > b.minute) return 1;
+                        else if(a.minute < b.minute) return -1;
+                        return 1;
                 })
             }
         })
@@ -190,6 +218,7 @@ class App extends Component{
 
     render(){
 
+        {console.log(this.state)}
         const listOfActivity = this.state.activity.map( 
                 element => {
 
@@ -207,6 +236,10 @@ class App extends Component{
                     yearAdded={element.addedOn.year}
                     hourAdded={element.addedOn.hour}
                     minuteAdded={element.addedOn.minute}
+
+                    dayPlanned = {element.dateOn.day}
+                    monthPlanned = {element.dateOn.month}
+                    yearPlanned = {element.dateOn.year}
                     
                     />
                     );
@@ -220,7 +253,11 @@ class App extends Component{
                 eventTimeChangeMinute={this.state.nowTime.minute} 
                 eventTimeChangeSeconds={this.state.nowTime.seconds} 
 
-                eventChange={(e) => this.eventOnChange(e)} eventSubmit={() => this.eventOnSubmit()}></EditEvent>
+                eventChangeDate={(e) => this.eventOnChangeDate(e)}
+                eventChange={(e) => this.eventOnChange(e)} 
+                eventSubmit={() => this.eventOnSubmit()}>
+
+                </EditEvent>
                 <div className="sort-elements__main">
                     <button onClick={() => this.hideOrShowElementsOnSort()}>SORT</button>
                     <div className="listed-menu" id="listed_menu">
@@ -229,7 +266,7 @@ class App extends Component{
                         <button onClick={() => this.sortElementsByDate()}>by date</button>
                     </div>
                 </div>
-                {listOfActivity}e
+                {listOfActivity}
 
 
             </div>
