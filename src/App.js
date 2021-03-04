@@ -4,6 +4,8 @@ import EditEvent from './EditEvent';
 import uniqid from "uniqid"
 import PropTypes from 'prop-types';
 import {validateActivity, validateHour, validateMinute} from './validateUtils';
+import { BrowserRouter as Router, Route, Switch} from 'react-router-dom'; 
+import About from './About';
 
 
 class App extends Component{
@@ -185,6 +187,7 @@ class App extends Component{
         
         this.setState(prevState=>{
             return{
+                ...prevState,
                 activity : prevState.activity.sort((a,b)=>{
                         if (a.dateOn.year > b.dateOn.year) return 1;
                         else if(a.dateOn.year < b.dateOn.year) return -1;
@@ -247,17 +250,28 @@ class App extends Component{
             );
 
         return (
+
+            <Router>
             <div className="main">
- 
-                <EditEvent  eventTimeChangeHour={this.state.nowTime.hour} 
+
+
+                <EditEvent  
+                eventTimeChangeHour={this.state.nowTime.hour} 
                 eventTimeChangeMinute={this.state.nowTime.minute} 
                 eventTimeChangeSeconds={this.state.nowTime.seconds} 
 
                 eventChangeDate={(e) => this.eventOnChangeDate(e)}
                 eventChange={(e) => this.eventOnChange(e)} 
                 eventSubmit={() => this.eventOnSubmit()}>
-
                 </EditEvent>
+
+                <Switch>
+                    <Route path="/about">
+                        <About></About>
+                    </Route>
+                </Switch>
+
+
                 <div className="sort-elements__main">
                     <button onClick={() => this.hideOrShowElementsOnSort()}>SORT</button>
                     <div className="listed-menu" id="listed_menu">
@@ -266,10 +280,12 @@ class App extends Component{
                         <button onClick={() => this.sortElementsByDate()}>by date</button>
                     </div>
                 </div>
+
                 {listOfActivity}
 
 
             </div>
+            </Router>
         )
     };
 }
