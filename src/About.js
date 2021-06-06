@@ -5,6 +5,7 @@ const About = () =>{
 
 return(
         <div style={{color : 'green'}}> 
+                <p> Created By Maciej M </p>
         </div>
     );
 }
